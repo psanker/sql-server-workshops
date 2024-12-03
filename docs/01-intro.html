@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>SQL &amp; Server</title>
+    <meta charset="utf-8" />
+    <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, inverse, middle, title-slide
+
+# SQL &amp; Server
+
+## Part I - Introduction
+
+### Patrick Anker
+
+.ties-footer[
+
+![Maimonides Medical Center](images/maimo-lockup.webp)
+
+]
+
+---
+class: middle, center
+
+## Before we begin...
+
+If you'd like to download any of the materials for this presentation, check out
+
+**&gt;&gt; [the workshop's website](index.html) &lt;&lt;**
+
+### 🚀
+
+---
+class: middle, center, inverse
+
+# History
+
+## 📚
+
+---
+
+# Ess-Cue-Ell or Sequel?
+
+.pull-left[
+
+Invented in 1974 by Donald Chamberlin &amp; Raymond Boyce at IBM from the research by Edgar Cobb on **relational data models**. First appeared in _System R_,&lt;sup&gt;1&lt;/sup&gt; called SQUARE, and then SEQUEL. Changed to **Structure Query Language (SQL)** due to copyright issues.
+
+]
+
+.pull-right[
+
+![Excerpt of referenced System R paper](images/sql-system-r.png)
+
+]
+
+.footnote[
+
+(1): https://people.eecs.berkeley.edu/~brewer/cs262/SystemR.pdf
+
+]
+
+---
+
+# SQL Server
+
+.pull-left[
+
+The first enterprise database with SQL was **Oracle** in 1977 (intended to be sold to the CIA). A group from Berkeley developed a competitor to Oracle in 1984 which became known as Sybase. 
+
+In 1986, Microsoft bought a license from Sybase to port the database to Windows. In 1989, SQL Server 1.0 was released.
+
+Needless to say, .red[SQL Server is] **.red[old]**.
+
+]
+
+.pull-right.right[
+
+&lt;img src="images/sybase.png" width="250px" /&gt;
+
+]
+
+---
+
+# SQL Server is .yellow[not] SQL!
+
+There are .red[many] SQL versions: IBM's DB2/SQL, PostgreSQL, Oracle's PL/SQL, Microsoft's **Transact SQL** (T-SQL), ANSI, and more.
+
+--
+
+T-SQL is the one SQL Server uses. We'll cover its oddities over the course of the workshops. Which begin with..
+
+---
+class: center, middle, inverse
+
+# SQL: The Overview
+
+## 🔭
+
+---
+
+# SQL: The Overview
+
+.pull-left[
+
+The query language&lt;sup&gt;1&lt;/sup&gt; follows this general flow:
+
+1. `SELECT`: which columns you want
+1. `FROM`: from which data you're pulling data
+1. `JOIN`: any other tables you need
+1. `WHERE`: include/exclude any records from table(s)
+1. `GROUP BY`: aggregate rows based on these columns
+1. `ORDER BY`: sort the result set based on columns in `SELECT`
+
+]
+
+.pull-right.font10[
+
+```sql
+SELECT 
+    dm.cat_member_gender, 
+    fd.str_diagnosis_code,
+    count(*) as N
+FROM dim_members dm
+LEFT JOIN fct_diagnoses fd
+    ON dm.id_member = fd.id_member
+WHERE 
+    upper(fd.str_diagnosis_desc) 
+        LIKE '%DIABET%'
+GROUP BY 
+    dm.cat_member_gender,
+    fd.str_diagnosis_code
+ORDER BY N desc;
+```
+
+_Always end your query statements with a semicolon!_
+
+]
+
+--
+
+.footnote.font10[
+
+(1): You'll see this sometimes called "DQL" (data query language). SQL comes in four major "sublanguages": Data Query Language (DQL), Data Description Language (DDL), Data Manipulation Language (DML), and Transaction Control Language (TCL). We'll cover the 3 D's.
+
+]
+
+---
+
+# SQL: The Overview
+
+The way queries are written is not quite the way the data are retrieved.
+
+.pull-left.font10[
+
+.center[
+
+#### Query
+
+]
+
+```sql
+SELECT 
+    dm.cat_member_gender, 
+    fd.str_diagnosis_code,
+    count(*) as N
+FROM dim_members dm
+LEFT JOIN fct_diagnoses fd
+    ON dm.id_member = fd.id_member
+WHERE 
+    upper(fd.str_diagnosis_desc) 
+        LIKE '%DIABET%'
+GROUP BY 
+    dm.cat_member_gender,
+    fd.str_diagnosis_code
+ORDER BY N desc;
+```
+
+]
+
+.pull-right.font10.center[
+
+#### Execution Plan
+
+&lt;img src="images/general-execution-plan.png" width="200px" /&gt;
+
+]
+
+---
+class: center, middle, inverse
+
+# Let's go to SSMS...
+
+---
+class: center, middle
+
+# ... and we're back!
+
+---
+
+# Saving Work: Tables &amp; Views
+
+Before we close for today, we should discuss the difference between "tables" and "views."
+
+.pull-left[
+
+## Table
+
+A table is a **physical** representation of data stored on disk. In other words,
+once they are made, the data returned from the generating query is saved to disk.
+
+]
+
+.pull-right[
+
+## View
+
+A view is a **virtual** representation of data stored on disk. It is basically a saved query:
+every time you select from a view, it has to recompute the generating query.
+
+]
+
+---
+
+# Creating Views
+
+For your work as analysts, you'll most likely be creating views in the **marts** database. This is how one would do that:
+
+```sql
+use marts;
+go
+
+create or alter view my_fun_view as
+select top (100) * from wh.ipa.fct_diagnoses;
+--                      ^----- refers to DB outside of current DB
+go
+```
+
+---
+
+# Exercise When You Have Time
+
+Consider our final exercise in `01-intro.sql`. Look up [`ROW_NUMBER()`](https://learn.microsoft.com/en-us/sql/t-sql/functions/row-number-transact-sql?view=sql-server-ver16), and window functions more generally, and see how you could get the top 10 diagnoses per month all in the same table. Save that query to a view in the `marts` database.
+
+---
+class: center, middle
+
+# Questions?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"countIncrementalSlides": false,
+"highlightLines": true,
+"highlightStyle": "solarized-light",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
