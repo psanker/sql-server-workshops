@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+
+:root {
+  --color-navbar-link: #fdfdfd;
+  --color-navbar-link-hover: ##AE347A;
+  --color-navbar-bg: #347AAE;
+}
+
+body {
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.navbar {
+  background-color: var(--color-navbar-bg);
+  height: 80px;
+}
+
+.navbar .container {
+  padding: 15px;
+}
+
+.navbar-brand-image {
+  padding: 0 25px 0 15px;
+}
+
+.navbar-default .navbar-brand {
+  color: var(--color-navbar-link);
+}
+
+.navbar-default .navbar-brand:hover {
+  color: var(--color-navbar-link-hover);
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: var(--color-navbar-link);
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+  color: var(--color-navbar-link-hover);
+}
+
+.navbar-default .navbar-nav > .active > a {
+  background: none;
+  color: var(--color-navbar-link);
+}
+
+.navbar-default .navbar-nav > .active > a:hover {
+  background: none;
+  color: var(--color-navbar-link-hover);
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
+  background: none;
+  color: var(--color-navbar-link-hover);
+}
