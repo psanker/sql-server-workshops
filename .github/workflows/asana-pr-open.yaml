@@ -1,0 +1,22 @@
+name: Notify Asana on PR Open/Edit
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - name: Set PR number
+        run: echo "::set-env name=PR_NUMBER::$(echo -n "${GITHUB_REF}" | awk 'BEGIN { FS = "/" } ; { print $3 }')"
+      - uses: panther-labs/github-asana-action@v3.0.4
+        with:
+          asana-pat: ${{ secrets.ASANA_PAT }}
+          trigger-phrase-regex: '\/asana'
+          action: 'add-comment'
+          comment-id: "#pr:${{ env.PR_NUMBER }}"
+          text: 'View PR: https://github.com/nyuglobalties/git-workshops/pull/${{ env.PR_NUMBER }}/'
+          is-pinned: true

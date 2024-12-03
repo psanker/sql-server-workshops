@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+
+xaringan-themer.css
+README.html
+
+_targets
+_site
+
+**/*.afdesign

@@ -1,0 +1,17 @@
+name: "ties-git-workshop"
+# navbar:
+#   title: Let's Write a Paper
+#   left:
+#     - text: Home
+#       icon: fa-home
+#       href: index.html
+#     - text: Slides
+#       icon: fa-buffer
+#       menu:
+#         - text: "Part I - Introduction"
+#           href: 01-intro.html
+#         - text: "Part II - git"
+#           href: 02-git.html
+#   right:
+#     - icon: fa-github fa-large
+#       href: https://github.com/nyuglobalties/git-workshops

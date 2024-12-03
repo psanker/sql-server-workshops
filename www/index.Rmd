@@ -1,0 +1,14 @@
+---
+title: "Welcome!"
+---
+
+<link rel="stylesheet" href="home.css" />
+
+> Welcome to **SQL \& Server**, a collaborative workshop series about using **SQL** and [**SQL Server**](https://www.microsoft.com/en-us/sql-server). No experience is required!
+
+This series of workshops were given to the Data \& Analytics Team for the Department of Population Health, but all are welcome to browse.
+
+## Materials
+
+All of the materials for these slides can be located at [this Github repo](https://github.com/psanker/sql-server-workshops) (octocat icon in the top-right corner!).
+
